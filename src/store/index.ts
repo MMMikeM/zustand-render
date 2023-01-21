@@ -16,7 +16,7 @@ type Item = Record<
 
 const now = Date.now()
 
-const data = {
+const data: Item = {
   1: { name: "a", updatedOn: now },
   2: { name: "b", updatedOn: now },
   3: { name: "c", updatedOn: now },
@@ -27,12 +27,9 @@ const data = {
 const useStore = create<Store>()((set) => ({
   data,
   setData: (id: number, value: Item[number]) => {
-    set(({ data }) => {
-      data[id] = value
-      return { data }
-    })
+    set((state) => ({ data: { ...state.data, ...{ [id]: value } } }));
   },
-}))
+}));
 
 export const useValue = (id: number) => useStore(({ data }) => data[id])
 export const useSet = () => useStore(({ setData }) => setData)
